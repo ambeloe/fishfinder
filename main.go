@@ -90,7 +90,11 @@ func rMain() int {
 			if len(nodes) == 0 {
 				return 0
 			}
+			if *verbose {
+				fmt.Println("page:", nodes[0].FirstChild.Data)
+			}
 			*storeUrl = baseUrl.String() + "?page=" + nodes[0].FirstChild.Data
+
 		}
 	//js page -> json from api
 	case 2:
