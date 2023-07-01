@@ -27,6 +27,7 @@ func main() {
 }
 
 func rMain() int {
+	var separator = flag.String("s", " | ", "separator to separate item name and url")
 	var storeUrl = flag.String("u", "", "url to the category you want to find all the deals on")
 	var verbose = flag.Bool("v", false, "verbose mode (mainly just for debugging)")
 
@@ -75,7 +76,7 @@ func rMain() int {
 			//get listings
 			nodes = htmlquery.Find(page, "//span[contains(text(), \"savings are available\")]/../h3/a")
 			for _, e := range nodes {
-				fmt.Print(strings.ReplaceAll(e.FirstChild.Data, "&nbsp;", " ") + " | ")
+				fmt.Print(strings.ReplaceAll(e.FirstChild.Data, "&nbsp;", " ") + *separator)
 				for _, a := range e.Attr {
 					if a.Key == "href" {
 						fmt.Println(baseUrl.Scheme + "://" + baseUrl.Host + a.Val)
@@ -139,7 +140,7 @@ func rMain() int {
 				tempS = strings.ReplaceAll(tempS, "&nbsp;", " ")
 				tempS = strings.ReplaceAll(tempS, "&trade;", "™")
 
-				fmt.Print(tempS + " | ")
+				fmt.Print(tempS + *separator)
 
 				tempS, err = jsonparser.GetString(resp, "productResults", "["+strconv.Itoa(offset+i)+"]", "productUrl")
 				if err != nil {
