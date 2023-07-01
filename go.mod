@@ -1,6 +1,6 @@
 module github.com/ambeloe/fishfinder
 
-go 1.20
+go 1.16
 
 require (
 	github.com/Danny-Dasilva/CycleTLS/cycletls v0.0.0-20220620102923-c84d740b4757
