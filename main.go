@@ -28,6 +28,7 @@ func main() {
 
 func rMain() int {
 	var storeUrl = flag.String("u", "", "url to the category you want to find all the deals on")
+	var verbose = flag.Bool("v", false, "verbose mode (mainly just for debugging)")
 
 	flag.Parse()
 
@@ -99,9 +100,14 @@ func rMain() int {
 		var tempS string
 
 		*storeUrl = apiUrl + "?identifier=" + type2Regex.FindStringSubmatch(*storeUrl)[0][16:24]
+		if *verbose {
+			fmt.Println("api url base:", *storeUrl)
+		}
 
 		for {
-			//fmt.Println(offset)
+			if *verbose {
+				fmt.Println("offset:", offset)
+			}
 			resp, err = getPageWithUA(*storeUrl + "&offset=" + strconv.Itoa(offset))
 			if err != nil {
 				_, _ = fmt.Fprintln(os.Stderr, "error downloading json response:", err)
