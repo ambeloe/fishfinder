@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/Danny-Dasilva/CycleTLS/cycletls v0.0.0-20220620102923-c84d740b4757
 	github.com/antchfx/htmlquery v1.3.0
+	github.com/buger/jsonparser v1.1.1
 	golang.org/x/net v0.5.0
 )
 
