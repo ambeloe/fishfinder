@@ -1,4 +1,4 @@
-module fishfinder
+module github.com/ambeloe/fishfinder
 
 go 1.20
 
