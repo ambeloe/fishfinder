@@ -41,12 +41,17 @@ func rMain() int {
 	var pageType int
 
 	//parse url for future shenanigans
-	baseUrl, err = url.Parse(*storeUrl)
-	if err != nil {
-		_, _ = fmt.Fprintln(os.Stderr, "error parsing url:", err)
+	if *storeUrl != "" {
+		baseUrl, err = url.Parse(*storeUrl)
+		if err != nil {
+			_, _ = fmt.Fprintln(os.Stderr, "error parsing url:", err)
+			return 1
+		}
+		baseUrl.RawQuery = ""
+	} else {
+		_, _ = fmt.Fprintln(os.Stderr, "url cannot be empty!")
 		return 1
 	}
-	baseUrl.RawQuery = ""
 
 	if type1Regex.MatchString(baseUrl.Path) {
 		pageType = 1
@@ -60,6 +65,8 @@ func rMain() int {
 	switch pageType {
 	//html page
 	case 1:
+		var pageNum int
+
 		for {
 			resp, err = getPageWithUA(*storeUrl)
 			if err != nil {
@@ -86,14 +93,15 @@ func rMain() int {
 			}
 
 			//check if next button exists; go to next page if yes
-			nodes = htmlquery.Find(page, "//a[span[text()=\"Next\"]]/@data-page-number")
+			nodes = htmlquery.Find(page, "//a[span[text()=\"Next\"]]")
 			if len(nodes) == 0 {
 				return 0
 			}
+			pageNum++
 			if *verbose {
-				fmt.Println("page:", nodes[0].FirstChild.Data)
+				fmt.Println("page:", pageNum)
 			}
-			*storeUrl = baseUrl.String() + "?page=" + nodes[0].FirstChild.Data
+			*storeUrl = baseUrl.String() + "?page=" + strconv.Itoa(pageNum)
 
 		}
 	//js page -> json from api
